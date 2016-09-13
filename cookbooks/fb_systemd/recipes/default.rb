@@ -53,6 +53,7 @@ end
 package systemd_packages do
   only_if { node['fb_systemd']['manage_systemd_packages'] }
   action :upgrade
+  notifies :run, 'fb_systemd[update systemd-boot]'
 end
 
 fb_systemd_reload 'system instance' do
@@ -111,6 +112,7 @@ include_recipe 'fb_systemd::logind'
 include_recipe 'fb_systemd::networkd'
 include_recipe 'fb_systemd::resolved'
 include_recipe 'fb_systemd::timesyncd'
+include_recipe 'fb_systemd::boot'
 
 execute 'process tmpfiles' do
   command "#{systemd_prefix}/bin/systemd-tmpfiles --create"
